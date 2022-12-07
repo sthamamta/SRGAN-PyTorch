@@ -197,6 +197,15 @@ def preprocess_one_image(image_path: str, device: torch.device) -> Tensor:
 
     return tensor
 
+def preprocess_one_image_array(image, device: torch.device) -> Tensor:
+    
+    # Convert image data to pytorch format data
+    tensor = image_to_tensor(image, False, False).unsqueeze_(0)
+
+    # Transfer tensor channel image format data to CUDA device
+    tensor = tensor.to(device=device, memory_format=torch.channels_last, non_blocking=True)
+
+    return tensor
 
 # Code reference `https://github.com/xinntao/BasicSR/blob/master/basicsr/utils/matlab_functions.py`
 def image_resize(image: Any, scale_factor: float, antialiasing: bool = True) -> Any:
